@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Увійти — П’ять наречених</title>
+    <title>Вхід / Реєстрація — П’ять наречених</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="login-page">
     <nav>
         <img src="./images/logotyp.webp" alt="Логотип" class="logo">
         <ul>
@@ -22,34 +22,60 @@
     </nav>
 
     <main>
-        <form action="welcome.html" method="get" class="login-form">
-            <h2>Вхід</h2>
-            <input type="text" placeholder="Ваше ім’я" required>
-            <input type="password" name="passw" id="passw" placeholder="Пароль" required>
-            <br>
-            <button type="submit">Увійти</button>
-            <button type="reset">Очистити</button>
-        </form>
+        <div class="auth-box">
+            <div class="auth-tabs">
+                <button type="button" id="tab-login" class="auth-tab" onclick="showTab('login')">Увійти</button>
+                <button type="button" id="tab-register" class="auth-tab active" onclick="showTab('register')">Створити
+                    акаунт</button>
+            </div>
+
+            <div id="auth-message" class="auth-message"></div>
+
+            <form id="login-form" class="login-form" style="display: none;">
+                <h2>Вхід</h2>
+                <input type="text" id="login-name" placeholder="Ваше ім’я" required autocomplete="username">
+                <input type="password" id="login-password" placeholder="Пароль" required
+                    autocomplete="current-password">
+                <br>
+                <button type="submit">Увійти</button>
+            </form>
+
+            <form id="register-form" class="login-form">
+                <h2>Створити акаунт</h2>
+                <input type="text" id="reg-name" placeholder="Ваше ім’я" required autocomplete="username">
+                <input type="password" id="reg-password" placeholder="Пароль (мін. 4 символи)" required minlength="4"
+                    autocomplete="new-password">
+                <input type="password" id="reg-password2" placeholder="Підтвердіть пароль" required minlength="4"
+                    autocomplete="new-password">
+
+                <div class="photo-upload">
+                    <label for="reg-photo">Фото профілю (необов’язково)</label>
+                    <input type="file" id="reg-photo" accept="image/*">
+                    <img id="photo-preview" alt="Прев’ю" style="display:none;">
+                </div>
+
+                <br>
+                <button type="submit">Зареєструватися</button>
+            </form>
+        </div>
     </main>
 
     <footer>
         <ul class="social">
-            <li>
-                <a href="mailto:kitit@gmail.com" target="_blank"><img src="images/mail.png" alt="" width="60" /></a>
+            <li><a href="mailto:kitit@gmail.com" target="_blank"><img src="images/mail.png" alt="" width="60" /></a>
             </li>
-            <li>
-                <a href="tel:+380937012345" target="_blank"><img src="images/telephone.png" alt="" width="60" /></a>
+            <li><a href="tel:+380937012345" target="_blank"><img src="images/telephone.png" alt="" width="60" /></a>
             </li>
-            <li>
-                <a href="viber://chat?number=%2B79001234567" target="_blank"><img src="images/viber.png" alt="" width="60" /></a>
-            </li>
-            <li>
-                <a href="https://t.me/IT_SCHOOL_KH" target="_blank"><img src="images/telegram.png" alt="" width="60" /></a>
-            </li>
+            <li><a href="viber://chat?number=%2B79001234567" target="_blank"><img src="images/viber.png" alt=""
+                        width="60" /></a></li>
+            <li><a href="https://t.me/IT_SCHOOL_KH" target="_blank"><img src="images/telegram.png" alt=""
+                        width="60" /></a></li>
         </ul>
         <h3>Copyright 2026. П’ять наречених. Усі права захищено.</h3>
         <p>2026</p>
     </footer>
+
+    <script src="script.js"></script>
 </body>
 
 </html>

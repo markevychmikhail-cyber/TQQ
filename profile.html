@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профіль — П’ять наречених</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav>
+        <a href="./index.html">
+            <img src="./images/logotyp.webp" alt="Логотип" class="logo">
+        </a>
+        <ul>
+            <li><a href="./index.html">Головна</a></li>
+            <li><a href="./about.html">Про аніме</a></li>
+            <li><a href="./gallery.html">Галерея</a></li>
+            <li><a href="./blog.html">Блог</a></li>
+            <li><a href="./contacts.html">Контакти</a></li>
+            <li><a href="login.html">Увійти</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Мій профіль</h1>
+    </header>
+
+    <main>
+        <section class="profile-section">
+            <div class="profile-card">
+                <img id="profile-photo" src="./images/logotyp.webp" alt="Фото профілю" class="profile-avatar">
+                <h2 id="profile-name">Користувач</h2>
+                <p id="profile-date" class="profile-meta"></p>
+
+                <div class="profile-actions">
+                    <label class="button change-photo-btn">
+                        Змінити фото
+                        <input type="file" accept="image/*" onchange="changeProfilePhoto(this)" style="display:none;">
+                    </label>
+                    <button type="button" class="button logout-btn" onclick="logoutUser()">Вийти</button>
+                </div>
+            </div>
+
+            <div class="profile-info">
+                <h3>Ласкаво просимо!</h3>
+                <p>Це твій особистий простір на сайті про аніме «П’ять наречених».</p>
+                <p>Після входу в меню замість «Увійти» з’являється «Профіль».</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <ul class="social">
+            <li><a href="mailto:kitit@gmail.com" target="_blank"><img src="images/mail.png" alt="" width="60" /></a></li>
+            <li><a href="tel:+380937012345" target="_blank"><img src="images/telephone.png" alt="" width="60" /></a></li>
+            <li><a href="viber://chat?number=%2B79001234567" target="_blank"><img src="images/viber.png" alt="" width="60" /></a></li>
+            <li><a href="https://t.me/IT_SCHOOL_KH" target="_blank"><img src="images/telegram.png" alt="" width="60" /></a></li>
+        </ul>
+        <h3>Copyright 2026. П’ять наречених. Усі права захищено.</h3>
+        <p>2026</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
