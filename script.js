@@ -261,12 +261,139 @@ function changeProfilePhoto(input) {
   reader.readAsDataURL(file);
 }
 
+function showGalleryMessage(text, isError = false) {
+  const message = document.getElementById('gallery-message');
+  if (!message) return;
+  message.textContent = text;
+  message.className = 'gallery-message' + (isError ? ' error' : ' success');
+}
+
+function renderUserGallery() {
+  const user = getUser();
+  const gallery = document.getElementById('user-gallery');
+  const emptyMessage = document.getElementById('gallery-empty');
+  if (!user || !gallery || !emptyMessage) return;
+
+  const images = Array.isArray(user.gallery) ? user.gallery : [];
+  gallery.replaceChildren();
+  emptyMessage.hidden = images.length > 0;
+
+  images.forEach(image => {
+    const card = document.createElement('figure');
+    card.className = 'user-gallery-card';
+
+    const link = document.createElement('a');
+    link.href = image.src;
+    link.target = '_blank';
+    link.rel = 'noopener';
+
+    const img = document.createElement('img');
+    img.src = image.src;
+    img.alt = image.title || 'Зображення з моєї галереї';
+    link.appendChild(img);
+    card.appendChild(link);
+
+    const caption = document.createElement('figcaption');
+    caption.textContent = image.title || 'Без назви';
+    card.appendChild(caption);
+
+    const removeButton = document.createElement('button');
+    removeButton.type = 'button';
+    removeButton.className = 'gallery-remove-button';
+    removeButton.textContent = 'Видалити';
+    removeButton.dataset.imageId = image.id;
+    card.appendChild(removeButton);
+
+    gallery.appendChild(card);
+  });
+}
+
+function handleAddGalleryImage(event) {
+  event.preventDefault();
+
+  const input = document.getElementById('gallery-image');
+  const titleInput = document.getElementById('gallery-image-title');
+  const file = input.files && input.files[0];
+
+  if (!file) {
+    showGalleryMessage('Спочатку обери зображення.', true);
+    return;
+  }
+  const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif', 'image/bmp'];
+  if (!allowedImageTypes.includes(file.type)) {
+    showGalleryMessage('Обери зображення у форматі JPEG, PNG, WebP, GIF, AVIF або BMP.', true);
+    return;
+  }
+  if (file.size > 1.5 * 1024 * 1024) {
+    showGalleryMessage('Зображення завелике. Максимальний розмір — 1,5 МБ.', true);
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function () {
+    const user = getUser();
+    if (!user || typeof reader.result !== 'string') {
+      showGalleryMessage('Не вдалося прочитати обліковий запис або зображення.', true);
+      return;
+    }
+
+    const images = Array.isArray(user.gallery) ? user.gallery : [];
+    images.push({
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2),
+      src: reader.result,
+      title: titleInput.value.trim() || file.name
+    });
+    user.gallery = images;
+
+    try {
+      saveUser(user);
+      renderUserGallery();
+      document.getElementById('add-image-form').reset();
+      showGalleryMessage('Зображення додано до твоєї галереї.');
+    } catch (error) {
+      if (error.name === 'QuotaExceededError' || error.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+        showGalleryMessage('У сховищі браузера недостатньо місця. Видали кілька зображень і спробуй ще раз.', true);
+      } else {
+        showGalleryMessage('Не вдалося зберегти зображення. Спробуй ще раз.', true);
+      }
+    }
+  };
+  reader.onerror = function () {
+    showGalleryMessage('Не вдалося прочитати файл зображення.', true);
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeGalleryImage(imageId) {
+  const user = getUser();
+  if (!user || !Array.isArray(user.gallery)) return;
+
+  user.gallery = user.gallery.filter(image => image.id !== imageId);
+  try {
+    saveUser(user);
+    renderUserGallery();
+    showGalleryMessage('Зображення видалено.');
+  } catch (error) {
+    showGalleryMessage('Не вдалося оновити галерею. Спробуй ще раз.', true);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   const path = window.location.pathname || '';
   if (path.endsWith('login.html') || window.location.href.includes('login.html')) {
     initLoginPage();
   } else if (path.endsWith('profile.html') || window.location.href.includes('profile.html')) {
     initProfilePage();
+  } else if (path.endsWith('mine_gallery.html') || window.location.href.includes('mine_gallery.html')) {
+    if (requireAuth()) {
+      updateNavAuthLink();
+      renderUserGallery();
+      document.getElementById('add-image-form').addEventListener('submit', handleAddGalleryImage);
+      document.getElementById('user-gallery').addEventListener('click', function (event) {
+        const button = event.target.closest('.gallery-remove-button');
+        if (button) removeGalleryImage(button.dataset.imageId);
+      });
+    }
   } else {
     initPage();
   }

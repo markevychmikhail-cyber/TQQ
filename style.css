@@ -16,7 +16,7 @@ body {
 body {
   background-color: #fff5f7;
   font-family: "Segoe UI", Arial, Helvetica, sans-serif;
-  color: #050361;
+  color: #202020;
 }
 
 /* Заголовки */
@@ -123,6 +123,7 @@ header h1 {
 /* ===== Основний контент ===== */
 main {
   padding: 30px 20px;
+  background-color: rgba(255, 255, 255, 0.45);
 }
 
 section {
@@ -505,4 +506,101 @@ footer h3 {
 .profile-info h3 {
   margin-top: 0;
   color: #8b3a4a;
+}
+
+/* ===== Особиста галерея ===== */
+.user-gallery-section {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.user-gallery-upload {
+  max-width: 520px;
+  margin: 0 auto 40px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(139, 58, 74, 0.12);
+}
+
+.user-gallery-upload h2 {
+  color: #8b3a4a;
+}
+
+.user-gallery-upload form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-gallery-upload input[type="file"],
+.user-gallery-upload input[type="text"] {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #c45c6a;
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+}
+
+.user-gallery-upload .button {
+  cursor: pointer;
+  align-self: center;
+}
+
+.gallery-message {
+  min-height: 1.5em;
+  text-align: center;
+}
+
+.gallery-message.error {
+  color: #a33;
+}
+
+.gallery-message.success {
+  color: #2a6b3c;
+}
+
+.gallery-empty {
+  text-align: center;
+}
+
+.user-gallery-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.user-gallery-card {
+  width: 220px;
+  margin: 0;
+  padding: 12px;
+  background: #fff;
+  border: 2px solid #e8a0b0;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.user-gallery-card img {
+  width: 100%;
+  height: 180px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.user-gallery-card figcaption,
+.user-gallery-card p {
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+}
+
+.gallery-remove-button {
+  padding: 7px 12px;
+  border: 1px solid #c45c6a;
+  border-radius: 20px;
+  background: #f0e0e4;
+  color: #8b3a4a;
+  cursor: pointer;
 }
