@@ -30,23 +30,44 @@
     <main>
         <section class="profile-section">
             <div class="profile-card">
-                <img id="profile-photo" src="./images/logotyp.webp" alt="Фото профілю" class="profile-avatar">
+                <div class="profile-avatar-wrap">
+                    <img id="profile-photo" src="./images/logotyp.webp" alt="Фото профілю" class="profile-avatar">
+                    <label class="avatar-edit-btn" title="Змінити фото">
+                        ✎
+                        <input type="file" accept="image/*" onchange="changeProfilePhoto(this)" style="display:none;">
+                    </label>
+                </div>
+
                 <h2 id="profile-name">Користувач</h2>
                 <p id="profile-date" class="profile-meta"></p>
 
+                <div class="profile-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="stat-shared">0</span>
+                        <span class="stat-label">Спільних фото</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="stat-private">0</span>
+                        <span class="stat-label">Особистих фото</span>
+                    </div>
+                </div>
+
                 <div class="profile-actions">
-                    <label class="button change-photo-btn">
-                        Змінити фото
-                        <input type="file" accept="image/*" onchange="changeProfilePhoto(this)" style="display:none;">
-                    </label>
-                    <button type="button" class="button logout-btn" onclick="logoutUser()">Вийти</button>
+                    <a href="./gallery.html" class="button">Спільна галерея</a>
+                    <a href="./mine_gallery.html" class="button">Моя галерея</a>
+                    <button type="button" class="button logout-btn" onclick="logoutUser()">Вийти з акаунта</button>
                 </div>
             </div>
 
             <div class="profile-info">
                 <h3>Ласкаво просимо!</h3>
-                <p>Це твій особистий простір на сайті про аніме «П’ять наречених».</p>
-                <p>Після входу в меню замість «Увійти» з’являється «Профіль».</p>
+                <p>Це твій особистий кабінет на сайті про аніме <strong>«П’ять наречених»</strong>.</p>
+                <ul class="profile-features">
+                    <li>Акаунт зберігається навіть після закриття сайту</li>
+                    <li>Можеш додавати фото в спільну галерею</li>
+                    <li>Тільки ти можеш видаляти свої фото</li>
+                    <li>Є особиста галерея тільки для тебе</li>
+                </ul>
             </div>
         </section>
     </main>

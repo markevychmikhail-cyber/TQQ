@@ -10,7 +10,7 @@
 
 <body>
     <nav>
-        <a href="./profile.html">
+        <a href="./index.html">
             <img src="./images/logotyp.webp" alt="Логотип" class="logo">
         </a>
         <ul>
@@ -25,13 +25,11 @@
 
     <header>
         <h1>Галерея</h1>
-        <div>
-            <h2>Хочеш додати зображення?</h2>
-            <a href="./mine_gallery.html" class="button">Додавай</a>
-        </div>
+        <p class="description">Офіційні зображення та фото від фанатів</p>
     </header>
 
     <main>
+        <!-- Офіційні зображення -->
         <section>
             <h2>Арти та кадри</h2>
             <p style="text-align: center; max-width: 600px; margin: 0 auto 30px;">
@@ -90,7 +88,38 @@
             </div>
         </div>
 
+        <!-- ===== СПІЛЬНА ГАЛЕРЕЯ ВІД КОРИСТУВАЧІВ ===== -->
+        <section class="shared-gallery-section" style="margin-top: 60px;">
+            <h2>Фото від користувачів</h2>
+            <p style="text-align: center; max-width: 600px; margin: 0 auto 25px;">
+                Тут з’являються фото, які додають зареєстровані користувачі. Усі можуть їх бачити, а видалити — тільки той, хто додав.
+            </p>
 
+            <!-- Форма додавання (показується тільки залогіненим) -->
+            <div id="shared-upload-box" class="user-gallery-upload" style="display: none;">
+                <h3>Додати своє фото</h3>
+                <form id="shared-add-form">
+                    <label for="shared-image">Зображення (до 1,5 МБ)</label>
+                    <input type="file" id="shared-image"
+                        accept="image/jpeg,image/png,image/webp,image/gif,image/avif,image/bmp" required>
+                    <label for="shared-image-title">Назва (необов’язково)</label>
+                    <input type="text" id="shared-image-title" maxlength="80" placeholder="Наприклад, Моя улюблена сцена">
+                    <button class="button" type="submit">Додати в спільну галерею</button>
+                </form>
+                <p id="shared-message" class="gallery-message" role="status" aria-live="polite"></p>
+            </div>
+
+            <!-- Повідомлення для незалогінених -->
+            <div id="shared-login-prompt" style="text-align: center; margin: 20px 0 30px; display: none;">
+                <p>Щоб додати своє фото — <a href="login.html">увійди</a> або <a href="login.html">створи акаунт</a>.</p>
+            </div>
+
+            <!-- Список спільних фото -->
+            <p id="shared-empty" class="gallery-empty" style="display: none;">
+                Поки що немає фото від користувачів. Будь першим!
+            </p>
+            <div id="shared-gallery" class="user-gallery-grid"></div>
+        </section>
     </main>
 
     <footer>

@@ -604,3 +604,348 @@ footer h3 {
   color: #8b3a4a;
   cursor: pointer;
 }
+
+/* ===== Навігація: аватар користувача ===== */
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #8b3a4a;
+  font-weight: 600;
+  padding: 4px 10px 4px 4px;
+  border-radius: 30px;
+  background: #fff5f7;
+  border: 2px solid #e8a0b0;
+  transition: all 0.2s;
+}
+
+.nav-user:hover {
+  background: #e8a0b0;
+  color: #4a2c2a;
+}
+
+.nav-user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #c45c6a;
+}
+
+.nav-user-name {
+  font-size: 14px;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===== Покращений профіль ===== */
+.profile-avatar-wrap {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 18px;
+}
+
+.profile-avatar-wrap .profile-avatar {
+  margin: 0;
+}
+
+.avatar-edit-btn {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e8a0b0;
+  border: 2px solid #fff;
+  color: #4a2c2a;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: background 0.2s;
+}
+
+.avatar-edit-btn:hover {
+  background: #c45c6a;
+  color: #fff;
+}
+
+.profile-stats {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin: 20px 0 24px;
+  padding: 16px 0;
+  border-top: 1px solid #f0e0e4;
+  border-bottom: 1px solid #f0e0e4;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 26px;
+  font-weight: 700;
+  color: #8b3a4a;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #888;
+}
+
+.profile-features {
+  text-align: left;
+  margin: 16px 0 0;
+  padding-left: 20px;
+  line-height: 1.8;
+  color: #444;
+}
+
+.profile-features li {
+  margin-bottom: 6px;
+}
+
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.profile-actions .button {
+  margin: 0;
+  text-align: center;
+}
+
+/* ===== Навігація: аватар користувача ===== */
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #8b3a4a;
+  font-weight: 600;
+  padding: 4px 10px 4px 4px;
+  border-radius: 30px;
+  background: #fff5f7;
+  border: 2px solid #e8a0b0;
+  transition: all 0.2s;
+}
+
+.nav-user:hover {
+  background: #e8a0b0;
+  color: #4a2c2a;
+}
+
+.nav-user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #c45c6a;
+}
+
+.nav-user-name {
+  font-size: 14px;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===== Покращений профіль ===== */
+.profile-avatar-wrap {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 18px;
+}
+
+.profile-avatar-wrap .profile-avatar {
+  margin: 0;
+}
+
+.avatar-edit-btn {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e8a0b0;
+  border: 2px solid #fff;
+  color: #4a2c2a;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: background 0.2s;
+}
+
+.avatar-edit-btn:hover {
+  background: #c45c6a;
+  color: #fff;
+}
+
+.profile-stats {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin: 20px 0 24px;
+  padding: 16px 0;
+  border-top: 1px solid #f0e0e4;
+  border-bottom: 1px solid #f0e0e4;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 26px;
+  font-weight: 700;
+  color: #8b3a4a;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #888;
+}
+
+.profile-features {
+  text-align: left;
+  margin: 16px 0 0;
+  padding-left: 20px;
+  line-height: 1.8;
+  color: #444;
+}
+
+.profile-features li {
+  margin-bottom: 6px;
+}
+
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.profile-actions .button {
+  margin: 0;
+  text-align: center;
+}
+
+/* ===== Збережені акаунти ===== */
+.saved-accounts {
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  padding: 20px 20px 12px;
+  margin-bottom: 0;
+  box-shadow: 0 4px 20px rgba(139, 58, 74, 0.08);
+}
+
+.saved-accounts h3 {
+  margin: 0 0 14px;
+  font-size: 16px;
+  color: #8b3a4a;
+  text-align: center;
+}
+
+.saved-accounts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.saved-account-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 2px solid #f0e0e4;
+  background: #fff5f7;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.saved-account-item:hover {
+  border-color: #e8a0b0;
+  background: #fce8ed;
+}
+
+.saved-account-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #c45c6a;
+  flex-shrink: 0;
+}
+
+.saved-account-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.saved-account-name {
+  font-weight: 600;
+  color: #4a2c2a;
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.saved-account-date {
+  font-size: 12px;
+  color: #999;
+  margin-top: 2px;
+}
+
+.saved-account-remove {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #c45c6a;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  opacity: 0.5;
+  transition: all 0.2s;
+}
+
+.saved-account-item:hover .saved-account-remove {
+  opacity: 1;
+}
+
+.saved-account-remove:hover {
+  background: #c45c6a;
+  color: #fff;
+}
+
+.saved-accounts-hint {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  margin: 10px 0 0;
+}

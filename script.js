@@ -1,27 +1,43 @@
 // ===== П’ять наречених — система акаунтів (localStorage) =====
 
-const STORAGE_KEY = 'qq_user';
+const USERS_KEY = 'qq_users';
 const LOGGED_KEY = 'qq_logged_in';
+const SHARED_GALLERY_KEY = 'qq_shared_gallery';
 
-function getUser() {
+function getAllUsers() {
   try {
-    const data = localStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : null;
+    const data = localStorage.getItem(USERS_KEY);
+    return data ? JSON.parse(data) : {};
   } catch {
-    return null;
+    return {};
   }
 }
 
+function saveAllUsers(users) {
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+}
+
+function getUser() {
+  const name = localStorage.getItem(LOGGED_KEY);
+  if (!name) return null;
+  const users = getAllUsers();
+  return users[name] || null;
+}
+
 function saveUser(user) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+  if (!user || !user.name) return;
+  const users = getAllUsers();
+  users[user.name] = user;
+  saveAllUsers(users);
 }
 
 function isLoggedIn() {
-  return localStorage.getItem(LOGGED_KEY) === 'true' && getUser() !== null;
+  const name = localStorage.getItem(LOGGED_KEY);
+  return !!name && getUser() !== null;
 }
 
-function loginUser() {
-  localStorage.setItem(LOGGED_KEY, 'true');
+function loginUser(name) {
+  localStorage.setItem(LOGGED_KEY, name);
 }
 
 function logoutUser() {
@@ -37,35 +53,335 @@ function requireAuth() {
   return true;
 }
 
-// Оновлює пункт меню: "Увійти" → "Профіль"
+function createDefaultAvatar(name) {
+  const initial = (name || '?').charAt(0).toUpperCase();
+  const colors = ['#e8a0b0', '#c45c6a', '#8b3a4a', '#d4849a', '#f8c1cc'];
+  const color = colors[initial.charCodeAt(0) % colors.length];
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+      <rect width="200" height="200" fill="${color}"/>
+      <text x="100" y="120" font-size="90" fill="white" text-anchor="middle" font-family="Segoe UI, Arial" font-weight="bold">${initial}</text>
+    </svg>`;
+  return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+}
+
+// ===== Меню: аватар + ім'я =====
 function updateNavAuthLink() {
-  const navLinks = document.querySelectorAll('nav ul li a');
-  navLinks.forEach(link => {
-    const text = link.textContent.trim().toLowerCase();
-    if (text === 'увійти' || text === 'профіль') {
-      if (isLoggedIn()) {
-        link.textContent = 'Профіль';
-        link.href = 'profile.html';
-      } else {
-        link.textContent = 'Увійти';
-        link.href = 'login.html';
-      }
+  const navUl = document.querySelector('nav ul');
+  if (!navUl) return;
+
+  let authLi = null;
+  navUl.querySelectorAll('li').forEach(li => {
+    const a = li.querySelector('a');
+    if (!a) return;
+    const text = a.textContent.trim().toLowerCase();
+    if (text === 'увійти' || text === 'профіль' || a.classList.contains('nav-user')) {
+      authLi = li;
     }
+  });
+
+  if (!authLi) {
+    authLi = document.createElement('li');
+    navUl.appendChild(authLi);
+  }
+
+  if (isLoggedIn()) {
+    const user = getUser();
+    const name = user ? user.name : 'Профіль';
+    const photo = (user && user.photo) ? user.photo : createDefaultAvatar(name);
+
+    authLi.innerHTML = `
+      <a href="profile.html" class="nav-user" title="Мій профіль">
+        <img src="${photo}" alt="${name}" class="nav-user-avatar">
+        <span class="nav-user-name">${name}</span>
+      </a>
+    `;
+  } else {
+    authLi.innerHTML = `<a href="login.html">Увійти</a>`;
+  }
+}
+
+// ===== Спільна галерея =====
+function getSharedGallery() {
+  try {
+    const data = localStorage.getItem(SHARED_GALLERY_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveSharedGallery(images) {
+  localStorage.setItem(SHARED_GALLERY_KEY, JSON.stringify(images));
+}
+
+function showSharedMessage(text, isError = false) {
+  const message = document.getElementById('shared-message');
+  if (!message) return;
+  message.textContent = text;
+  message.className = 'gallery-message' + (isError ? ' error' : ' success');
+}
+
+function renderSharedGallery() {
+  const gallery = document.getElementById('shared-gallery');
+  const emptyMessage = document.getElementById('shared-empty');
+  if (!gallery) return;
+
+  const images = getSharedGallery();
+  gallery.replaceChildren();
+
+  if (emptyMessage) {
+    emptyMessage.style.display = images.length === 0 ? 'block' : 'none';
+  }
+
+  const currentUser = getUser();
+  const currentName = currentUser ? currentUser.name : null;
+
+  images.forEach(image => {
+    const card = document.createElement('figure');
+    card.className = 'user-gallery-card';
+
+    const link = document.createElement('a');
+    link.href = image.src;
+    link.target = '_blank';
+    link.rel = 'noopener';
+
+    const img = document.createElement('img');
+    img.src = image.src;
+    img.alt = image.title || 'Фото від користувача';
+    link.appendChild(img);
+    card.appendChild(link);
+
+    const caption = document.createElement('figcaption');
+    caption.textContent = image.title || 'Без назви';
+    card.appendChild(caption);
+
+    const owner = document.createElement('p');
+    owner.style.fontSize = '13px';
+    owner.style.color = '#8b3a4a';
+    owner.style.margin = '4px 0 8px';
+    owner.textContent = 'Додав: ' + (image.ownerName || 'Невідомо');
+    card.appendChild(owner);
+
+    if (currentName && image.ownerName === currentName) {
+      const removeButton = document.createElement('button');
+      removeButton.type = 'button';
+      removeButton.className = 'gallery-remove-button';
+      removeButton.textContent = 'Видалити';
+      removeButton.dataset.imageId = image.id;
+      card.appendChild(removeButton);
+    }
+
+    gallery.appendChild(card);
   });
 }
 
-function initPage() {
-  const isLoginPage = window.location.pathname.endsWith('login.html') ||
-                      window.location.href.includes('login.html');
+function handleAddSharedImage(event) {
+  event.preventDefault();
 
-  if (!isLoginPage) {
-    if (!requireAuth()) return;
+  if (!isLoggedIn()) {
+    showSharedMessage('Спочатку увійди в акаунт.', true);
+    return;
   }
+
+  const input = document.getElementById('shared-image');
+  const titleInput = document.getElementById('shared-image-title');
+  const file = input.files && input.files[0];
+
+  if (!file) {
+    showSharedMessage('Спочатку обери зображення.', true);
+    return;
+  }
+
+  const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif', 'image/bmp'];
+  if (!allowed.includes(file.type)) {
+    showSharedMessage('Обери зображення у форматі JPEG, PNG, WebP, GIF, AVIF або BMP.', true);
+    return;
+  }
+  if (file.size > 1.5 * 1024 * 1024) {
+    showSharedMessage('Зображення завелике. Максимум 1,5 МБ.', true);
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function () {
+    const user = getUser();
+    if (!user || typeof reader.result !== 'string') {
+      showSharedMessage('Не вдалося прочитати дані.', true);
+      return;
+    }
+
+    const images = getSharedGallery();
+    images.push({
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2),
+      src: reader.result,
+      title: titleInput.value.trim() || file.name,
+      ownerName: user.name,
+      createdAt: new Date().toISOString()
+    });
+
+    try {
+      saveSharedGallery(images);
+      renderSharedGallery();
+      document.getElementById('shared-add-form').reset();
+      showSharedMessage('Фото додано! Його бачать усі.');
+    } catch (error) {
+      if (error.name === 'QuotaExceededError' || error.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+        showSharedMessage('Недостатньо місця в браузері. Видали кілька фото.', true);
+      } else {
+        showSharedMessage('Не вдалося зберегти. Спробуй ще раз.', true);
+      }
+    }
+  };
+  reader.onerror = function () {
+    showSharedMessage('Не вдалося прочитати файл.', true);
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeSharedImage(imageId) {
+  if (!isLoggedIn()) return;
+  const user = getUser();
+  if (!user) return;
+
+  let images = getSharedGallery();
+  const photo = images.find(img => img.id === imageId);
+
+  if (!photo || photo.ownerName !== user.name) {
+    showSharedMessage('Ти можеш видаляти тільки свої фото.', true);
+    return;
+  }
+
+  images = images.filter(img => img.id !== imageId);
+  try {
+    saveSharedGallery(images);
+    renderSharedGallery();
+    showSharedMessage('Фото видалено.');
+  } catch (error) {
+    showSharedMessage('Не вдалося оновити галерею.', true);
+  }
+}
+
+function initSharedGalleryPage() {
   updateNavAuthLink();
+  renderSharedGallery();
+
+  const uploadBox = document.getElementById('shared-upload-box');
+  const loginPrompt = document.getElementById('shared-login-prompt');
+
+  if (isLoggedIn()) {
+    if (uploadBox) uploadBox.style.display = 'block';
+    if (loginPrompt) loginPrompt.style.display = 'none';
+
+    const form = document.getElementById('shared-add-form');
+    if (form) form.addEventListener('submit', handleAddSharedImage);
+
+    const gallery = document.getElementById('shared-gallery');
+    if (gallery) {
+      gallery.addEventListener('click', function (event) {
+        const button = event.target.closest('.gallery-remove-button');
+        if (button) removeSharedImage(button.dataset.imageId);
+      });
+    }
+  } else {
+    if (uploadBox) uploadBox.style.display = 'none';
+    if (loginPrompt) loginPrompt.style.display = 'block';
+  }
+}
+
+// ===== Збережені акаунти =====
+function renderSavedAccounts() {
+  const box = document.getElementById('saved-accounts');
+  const list = document.getElementById('saved-accounts-list');
+  if (!box || !list) return;
+
+  const users = getAllUsers();
+  const names = Object.keys(users);
+
+  if (names.length === 0) {
+    box.style.display = 'none';
+    return;
+  }
+
+  box.style.display = 'block';
+  list.replaceChildren();
+
+  names.forEach(name => {
+    const user = users[name];
+    const item = document.createElement('div');
+    item.className = 'saved-account-item';
+
+    const avatar = document.createElement('img');
+    avatar.className = 'saved-account-avatar';
+    avatar.src = user.photo || createDefaultAvatar(name);
+    avatar.alt = name;
+
+    const info = document.createElement('div');
+    info.className = 'saved-account-info';
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'saved-account-name';
+    nameEl.textContent = name;
+
+    const dateEl = document.createElement('div');
+    dateEl.className = 'saved-account-date';
+    if (user.createdAt) {
+      dateEl.textContent = 'Створено: ' + new Date(user.createdAt).toLocaleDateString('uk-UA');
+    }
+
+    info.appendChild(nameEl);
+    info.appendChild(dateEl);
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'saved-account-remove';
+    removeBtn.title = 'Видалити акаунт з цього браузера';
+    removeBtn.textContent = '×';
+    removeBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (confirm('Видалити акаунт «' + name + '» з цього браузера?')) {
+        deleteSavedAccount(name);
+      }
+    });
+
+    item.appendChild(avatar);
+    item.appendChild(info);
+    item.appendChild(removeBtn);
+
+    item.addEventListener('click', function () {
+      selectSavedAccount(name);
+    });
+
+    list.appendChild(item);
+  });
+}
+
+function selectSavedAccount(name) {
+  showTab('login');
+  const nameInput = document.getElementById('login-name');
+  const passInput = document.getElementById('login-password');
+  if (nameInput) nameInput.value = name;
+  if (passInput) {
+    passInput.value = '';
+    passInput.focus();
+  }
+  showMessage('Введи пароль для «' + name + '»');
+}
+
+function deleteSavedAccount(name) {
+  const users = getAllUsers();
+  delete users[name];
+  saveAllUsers(users);
+
+  if (localStorage.getItem(LOGGED_KEY) === name) {
+    localStorage.removeItem(LOGGED_KEY);
+  }
+
+  renderSavedAccounts();
+  showMessage('Акаунт «' + name + '» видалено з цього браузера');
 }
 
 // ===== Логін / Реєстрація =====
-
 function showTab(tab) {
   document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
   document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
@@ -85,18 +401,6 @@ function showMessage(text, isError = false) {
   if (!msg) return;
   msg.textContent = text;
   msg.className = 'auth-message ' + (isError ? 'error' : 'success');
-}
-
-function createDefaultAvatar(name) {
-  const initial = (name || '?').charAt(0).toUpperCase();
-  const colors = ['#e8a0b0', '#c45c6a', '#8b3a4a', '#d4849a', '#f8c1cc'];
-  const color = colors[initial.charCodeAt(0) % colors.length];
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
-      <rect width="200" height="200" fill="${color}"/>
-      <text x="100" y="120" font-size="90" fill="white" text-anchor="middle" font-family="Segoe UI, Arial" font-weight="bold">${initial}</text>
-    </svg>`;
-  return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
 }
 
 function handleRegister(e) {
@@ -120,8 +424,8 @@ function handleRegister(e) {
     return;
   }
 
-  const existing = getUser();
-  if (existing && existing.name === name) {
+  const users = getAllUsers();
+  if (users[name]) {
     showMessage('Користувач з таким ім’ям вже існує. Увійдіть.', true);
     return;
   }
@@ -131,10 +435,11 @@ function handleRegister(e) {
       name: name,
       password: password,
       photo: photoData,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      gallery: []
     };
     saveUser(user);
-    loginUser();
+    loginUser(name);
     showMessage('Акаунт створено! Переходимо...');
     setTimeout(() => {
       window.location.href = 'index.html';
@@ -165,16 +470,17 @@ function handleLogin(e) {
 
   const name = document.getElementById('login-name').value.trim();
   const password = document.getElementById('login-password').value;
-  const user = getUser();
+  const users = getAllUsers();
+  const user = users[name];
 
   if (!user) {
-    showMessage('Акаунтів ще немає. Спочатку зареєструйтеся.', true);
+    showMessage('Користувача з таким ім’ям не знайдено. Спочатку зареєструйтеся.', true);
     showTab('register');
     return;
   }
 
-  if (user.name === name && user.password === password) {
-    loginUser();
+  if (user.password === password) {
+    loginUser(name);
     showMessage('Успішний вхід! Переходимо...');
     setTimeout(() => {
       window.location.href = 'index.html';
@@ -190,8 +496,12 @@ function initLoginPage() {
     return;
   }
 
-  const user = getUser();
-  if (!user) {
+  const users = getAllUsers();
+  const hasUsers = Object.keys(users).length > 0;
+
+  renderSavedAccounts();
+
+  if (!hasUsers) {
     showTab('register');
   } else {
     showTab('login');
@@ -240,6 +550,14 @@ function initProfilePage() {
     dateEl.textContent = 'Акаунт створено: ' + d.toLocaleDateString('uk-UA');
   }
 
+  const sharedCount = getSharedGallery().filter(img => img.ownerName === user.name).length;
+  const privateCount = Array.isArray(user.gallery) ? user.gallery.length : 0;
+
+  const statShared = document.getElementById('stat-shared');
+  const statPrivate = document.getElementById('stat-private');
+  if (statShared) statShared.textContent = sharedCount;
+  if (statPrivate) statPrivate.textContent = privateCount;
+
   updateNavAuthLink();
 }
 
@@ -256,11 +574,14 @@ function changeProfilePhoto(input) {
     if (!user) return;
     user.photo = e.target.result;
     saveUser(user);
-    document.getElementById('profile-photo').src = user.photo;
+    const photoEl = document.getElementById('profile-photo');
+    if (photoEl) photoEl.src = user.photo;
+    updateNavAuthLink();
   };
   reader.readAsDataURL(file);
 }
 
+// ===== Особиста галерея =====
 function showGalleryMessage(text, isError = false) {
   const message = document.getElementById('gallery-message');
   if (!message) return;
@@ -319,13 +640,13 @@ function handleAddGalleryImage(event) {
     showGalleryMessage('Спочатку обери зображення.', true);
     return;
   }
-  const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif', 'image/bmp'];
-  if (!allowedImageTypes.includes(file.type)) {
+  const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif', 'image/bmp'];
+  if (!allowed.includes(file.type)) {
     showGalleryMessage('Обери зображення у форматі JPEG, PNG, WebP, GIF, AVIF або BMP.', true);
     return;
   }
   if (file.size > 1.5 * 1024 * 1024) {
-    showGalleryMessage('Зображення завелике. Максимальний розмір — 1,5 МБ.', true);
+    showGalleryMessage('Зображення завелике. Максимум 1,5 МБ.', true);
     return;
   }
 
@@ -333,7 +654,7 @@ function handleAddGalleryImage(event) {
   reader.onload = function () {
     const user = getUser();
     if (!user || typeof reader.result !== 'string') {
-      showGalleryMessage('Не вдалося прочитати обліковий запис або зображення.', true);
+      showGalleryMessage('Не вдалося прочитати дані.', true);
       return;
     }
 
@@ -352,14 +673,14 @@ function handleAddGalleryImage(event) {
       showGalleryMessage('Зображення додано до твоєї галереї.');
     } catch (error) {
       if (error.name === 'QuotaExceededError' || error.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
-        showGalleryMessage('У сховищі браузера недостатньо місця. Видали кілька зображень і спробуй ще раз.', true);
+        showGalleryMessage('Недостатньо місця. Видали кілька зображень.', true);
       } else {
-        showGalleryMessage('Не вдалося зберегти зображення. Спробуй ще раз.', true);
+        showGalleryMessage('Не вдалося зберегти.', true);
       }
     }
   };
   reader.onerror = function () {
-    showGalleryMessage('Не вдалося прочитати файл зображення.', true);
+    showGalleryMessage('Не вдалося прочитати файл.', true);
   };
   reader.readAsDataURL(file);
 }
@@ -374,27 +695,36 @@ function removeGalleryImage(imageId) {
     renderUserGallery();
     showGalleryMessage('Зображення видалено.');
   } catch (error) {
-    showGalleryMessage('Не вдалося оновити галерею. Спробуй ще раз.', true);
+    showGalleryMessage('Не вдалося оновити галерею.', true);
   }
 }
 
+// ===== Ініціалізація =====
 document.addEventListener('DOMContentLoaded', function () {
   const path = window.location.pathname || '';
-  if (path.endsWith('login.html') || window.location.href.includes('login.html')) {
+  const href = window.location.href || '';
+
+  if (path.endsWith('login.html') || href.includes('login.html')) {
     initLoginPage();
-  } else if (path.endsWith('profile.html') || window.location.href.includes('profile.html')) {
+  } else if (path.endsWith('profile.html') || href.includes('profile.html')) {
     initProfilePage();
-  } else if (path.endsWith('mine_gallery.html') || window.location.href.includes('mine_gallery.html')) {
+  } else if (path.endsWith('mine_gallery.html') || href.includes('mine_gallery.html')) {
     if (requireAuth()) {
       updateNavAuthLink();
       renderUserGallery();
-      document.getElementById('add-image-form').addEventListener('submit', handleAddGalleryImage);
-      document.getElementById('user-gallery').addEventListener('click', function (event) {
-        const button = event.target.closest('.gallery-remove-button');
-        if (button) removeGalleryImage(button.dataset.imageId);
-      });
+      const form = document.getElementById('add-image-form');
+      if (form) form.addEventListener('submit', handleAddGalleryImage);
+      const gallery = document.getElementById('user-gallery');
+      if (gallery) {
+        gallery.addEventListener('click', function (event) {
+          const button = event.target.closest('.gallery-remove-button');
+          if (button) removeGalleryImage(button.dataset.imageId);
+        });
+      }
     }
+  } else if (path.endsWith('gallery.html') || href.includes('gallery.html')) {
+    initSharedGalleryPage();
   } else {
-    initPage();
+    updateNavAuthLink();
   }
 });

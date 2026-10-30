@@ -10,7 +10,9 @@
 
 <body class="login-page">
     <nav>
-        <img src="./images/logotyp.webp" alt="Логотип" class="logo">
+        <a href="./index.html">
+            <img src="./images/logotyp.webp" alt="Логотип" class="logo">
+        </a>
         <ul>
             <li><a href="./index.html">Головна</a></li>
             <li><a href="./about.html">Про аніме</a></li>
@@ -23,6 +25,13 @@
 
     <main>
         <div class="auth-box">
+            <!-- Список збережених акаунтів -->
+            <div id="saved-accounts" class="saved-accounts" style="display: none;">
+                <h3>Вибрати акаунт</h3>
+                <div id="saved-accounts-list" class="saved-accounts-list"></div>
+                <p class="saved-accounts-hint">Натисни на акаунт, щоб увійти</p>
+            </div>
+
             <div class="auth-tabs">
                 <button type="button" id="tab-login" class="auth-tab" onclick="showTab('login')">Увійти</button>
                 <button type="button" id="tab-register" class="auth-tab active" onclick="showTab('register')">Створити
