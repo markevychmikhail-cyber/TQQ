@@ -1100,6 +1100,21 @@ footer h3 {
 }
 
 @media (max-width: 420px) {
+  html {
+    background-color: #fff5f7;
+    background-image: url(./images/whoisthebestsister.webp);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  body {
+    height: auto;
+    min-height: 100vh;
+    background: transparent;
+  }
+
   nav ul {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1147,7 +1162,4 @@ footer h3 {
     object-fit: contain;
   }
 
-  body {
-    background-attachment: scroll;
-  }
 }
