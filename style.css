@@ -964,6 +964,18 @@ footer h3 {
 
   html {
     background-attachment: scroll;
+    background-color: #fff5f7;
+    background-image: none;
+  }
+
+  body {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15)),
+      url(./images/whoisthebestsister.webp);
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
   }
 
   nav {
@@ -1018,10 +1030,20 @@ footer h3 {
 
   main {
     padding: 24px 16px;
+    background: transparent;
   }
 
   section {
-    margin-bottom: 36px;
+    margin-bottom: 24px;
+    padding: 18px;
+    border-radius: 16px;
+    background-color: rgba(255, 255, 255, 0.88);
+  }
+
+  main > ul {
+    padding: 12px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.88);
   }
 
   .description {
