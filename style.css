@@ -1101,7 +1101,7 @@ footer h3 {
 
 @media (max-width: 420px) {
   html {
-    background-color: #fff5f7;
+    /* background-color: #fff5f7; */
     background-image: url(./images/whoisthebestsister.webp);
     background-size: cover;
     background-position: center;
