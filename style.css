@@ -91,6 +91,7 @@ nav a {
   height: 56px;
   border-radius: 50%;
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .profile-logo {
@@ -247,7 +248,6 @@ section {
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(139, 58, 74, 0.12);
   text-align: center;
-  width: 100%;
   max-width: 380px;
   margin: 40px auto;
 }
