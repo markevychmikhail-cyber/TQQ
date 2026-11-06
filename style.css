@@ -958,6 +958,12 @@ footer h3 {
     box-sizing: border-box;
   }
 
+  body {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
+      url(./images/whoisthebestsister.webp);
+  }
+
   nav {
     flex-direction: column;
     gap: 12px;
@@ -1102,8 +1108,9 @@ footer h3 {
 @media (max-width: 420px) {
   html {
     /* background-color: #fff5f7; */
-    background-image: url(./images/whoisthebestsister.webp);
-    opacity: 0.5;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
+      url(./images/whoisthebestsister.webp);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
