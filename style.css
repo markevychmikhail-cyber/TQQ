@@ -1,12 +1,15 @@
 html,
 body {
-  height: 100%;
+  min-height: 100%;
   padding: 0;
   margin: 0;
 }
 
-body {
-  background-image: url(./images/whoisthebestsister.webp);
+html {
+  background-color: #fff5f7;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15)),
+    url(./images/whoisthebestsister.webp);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -14,7 +17,8 @@ body {
 }
 
 body {
-  background-color: #fff5f7;
+  min-height: 100vh;
+  background: transparent;
   font-family: "Segoe UI", Arial, Helvetica, sans-serif;
   color: #202020;
 }
@@ -124,7 +128,7 @@ header h1 {
 /* ===== Основний контент ===== */
 main {
   padding: 30px 20px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.62);
 }
 
 section {
@@ -958,10 +962,8 @@ footer h3 {
     box-sizing: border-box;
   }
 
-  body {
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
-      url(./images/whoisthebestsister.webp);
+  html {
+    background-attachment: scroll;
   }
 
   nav {
@@ -1106,21 +1108,8 @@ footer h3 {
 }
 
 @media (max-width: 420px) {
-  html {
-    /* background-color: #fff5f7; */
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
-      url(./images/whoisthebestsister.webp);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-  }
-
   body {
     height: auto;
-    min-height: 100vh;
-    background: transparent;
   }
 
   nav ul {
