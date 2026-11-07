@@ -133,8 +133,9 @@ main {
 
 section {
   clear: both;
-  margin-bottom: 50px;
   padding: 10px 0;
+  max-width: 600px;
+  margin:0 auto 50px;
 }
 
 .sister-text {
