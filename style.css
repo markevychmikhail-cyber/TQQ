@@ -19,7 +19,6 @@ html {
 body {
   min-height: 100vh;
   background: transparent;
-  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
   color: #202020;
 }
 
@@ -136,6 +135,16 @@ section {
   padding: 10px 0;
   max-width: 600px;
   margin:0 auto 50px;
+}
+
+.audio-page section {
+  text-align: center;
+}
+
+.audio-page audio {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .sister-text {
