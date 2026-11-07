@@ -244,14 +244,15 @@ section {
 }
 
 .column2 div {
-  width: 48%;
-  min-width: 280px;
+  width: 100%;
+  max-width: 700px;
+  min-width: 0;
 }
 
 .contacts_img {
   width: 100%;
-  height: 450px;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
   border-radius: 12px;
 }
 
@@ -1085,11 +1086,6 @@ footer h3 {
   #gallery div img {
     width: 100%;
     height: 180px;
-  }
-
-  .contacts_img {
-    height: auto;
-    max-height: 450px;
   }
 
   .profile-section {
