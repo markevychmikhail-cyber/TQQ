@@ -18,6 +18,7 @@
             <li><a href="./about.html">Про аніме</a></li>
             <li><a href="./gallery.html">Галерея</a></li>
             <li><a href="./audio-case.html">Аудіо з аніме</a></li>
+            <li><a href="./video_1_season.html">Серіал 1 сезон</a></li>
             <li><a href="./blog.html">Блог</a></li>
             <li><a href="./contacts.html">Контакти</a></li>
             <li><a href="login.html">Увійти</a></li>
@@ -30,8 +31,12 @@
     </header>
 
     <main>
+        <ul style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 40px;">
+            <li><a href="#artu">Арти та кадри;</a></li>
+            <li><a href="#frompeople">Фото від користувачів</a></li>
+        </ul>
         <!-- Офіційні зображення -->
-        <section>
+        <section id="artu">
             <h2>Арти та кадри</h2>
             <p style="text-align: center; max-width: 600px; margin: 0 auto 30px;">
                 Тут зібрані зображення сестер Накано.
@@ -90,10 +95,11 @@
         </div>
 
         <!-- ===== СПІЛЬНА ГАЛЕРЕЯ ВІД КОРИСТУВАЧІВ ===== -->
-        <section class="shared-gallery-section" style="margin-top: 60px;">
+        <section class="shared-gallery-section" style="margin-top: 60px;" id="frompeople">
             <h2>Фото від користувачів</h2>
             <p style="text-align: center; max-width: 600px; margin: 0 auto 25px;">
-                Тут з’являються фото, які додають зареєстровані користувачі. Усі можуть їх бачити, а видалити — тільки той, хто додав.
+                Тут з’являються фото, які додають зареєстровані користувачі. Усі можуть їх бачити, а видалити — тільки
+                той, хто додав.
             </p>
 
             <!-- Форма додавання (показується тільки залогіненим) -->
@@ -104,7 +110,8 @@
                     <input type="file" id="shared-image"
                         accept="image/jpeg,image/png,image/webp,image/gif,image/avif,image/bmp" required>
                     <label for="shared-image-title">Назва (необов’язково)</label>
-                    <input type="text" id="shared-image-title" maxlength="80" placeholder="Наприклад, Моя улюблена сцена">
+                    <input type="text" id="shared-image-title" maxlength="80"
+                        placeholder="Наприклад, Моя улюблена сцена">
                     <button class="button" type="submit">Додати в спільну галерею</button>
                 </form>
                 <p id="shared-message" class="gallery-message" role="status" aria-live="polite"></p>
@@ -112,7 +119,8 @@
 
             <!-- Повідомлення для незалогінених -->
             <div id="shared-login-prompt" style="text-align: center; margin: 20px 0 30px; display: none;">
-                <p>Щоб додати своє фото — <a href="login.html">увійди</a> або <a href="login.html">створи акаунт</a>.</p>
+                <p>Щоб додати своє фото — <a href="login.html">увійди</a> або <a href="login.html">створи акаунт</a>.
+                </p>
             </div>
 
             <!-- Список спільних фото -->

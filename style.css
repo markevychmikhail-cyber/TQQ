@@ -141,6 +141,16 @@ section {
   text-align: center;
 }
 
+.video-season section {
+  text-align: center;
+}
+
+.video-season video {
+  border: 1px solid #f9f8f8;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(139, 58, 74, 0.15);
+}
+
 .audio-page audio {
   display: block;
   max-width: 100%;
